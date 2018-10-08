@@ -64,19 +64,19 @@ A new syntax for triacontakaidecimal (base 32) integer literals is proposed. Thi
 to the system created by Douglas Crockford (author of "JavaScript: The Good Parts"), with one
 slight improvement (discussed below).
 
+Triacontakaidecimal digit characters should ideally be backwards compatible with their values in
+other integer literals, i.e. the digits 0..9 and A..F should have the same value in both
+hexadecimal and triacontakaidecimal, just as decimal and octal digits have the same value in
+hexadecimal. This will be consistent and compatible with the JavaScript _parseInt()_ function,
+simplify implementation, reduce programmer error and bugs, and improve learnability of the notation.
+
+###Past proposals
+
 Several RFCs have proposed a system for base 32, but none (it seems) have yet been introduced
 into a programming language for use in literals. All systems proposed to date derive a set of 32
 digit characters by starting with a set of 36 characters comprising the 10 digits and 26 letters
 of the English alphabet, and then excluding four of these. All systems accept both upper and
 lower-case letters, with the value of an upper-case letter equal to its lower-case variant.
-
-Triacontakaidecimal digit characters should be backwards compatible with their values in other
-integer literals, i.e. he digits 0..9 and A..F should have the same value in both hexadecimal
-and triacontakaidecimal, just as decimal and octal digits have the same value in hexadecimal. This
-will be consistent and compatible with the JavaScript _parseInt()_ function, simplify implementation,
-reduce programmer error and bugs, and improve learnability of the notation.
-
-Comparison with previous proposals:
 
 #### RFC 4648
 
@@ -121,12 +121,12 @@ However, this reason is weak, since:
 - the main readers of code are programmers, and the one language all programmers know is profanity
 - the likelihood that anyone will be exposed to triacontakaidecimal integer
   literals on a regular enough basis that a curse word would accidentally appear in one and the user
-  would be offended rather than amused is vanishgly small and of minimal consequence
+  would be offended rather than amused is extremely small and of minimal consequence
 
 See: Douglas Crockford, "Base32 Encoding"
 http://www.crockford.com/wrmg/base32.html
   
-#### New system
+### New system
 
 The proposal offered here is a slight modification of Crockford's, excluding "T" rather than "U",
 to avoid confusion between the "0t" prefix and the digit characters.
@@ -161,8 +161,8 @@ In Crockford's system, the letter "O" is accepted as 0, and the letters "I" and 
 For consistency with the current EcmaScript langauge specification and to reduce programmer error,
 this behaviour is **not** proposed for inclusion in the feature. The presence of any invalid letters
 or other characters in an triacontakaidecimal integer literal, including "O", "I" and "L" , should
-trigger a syntax error, and _parseint()_ should return "NaN" (or ignore trailing invalid characters
-as usual) as it does when parsing integer literals in other radixes.
+trigger a syntax error, and _parseint()_ should return "NaN", or ignore trailing invalid characters,
+as it currently does when parsing integer literals in other radixes.
 
 ## Proposed implementation
 

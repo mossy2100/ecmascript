@@ -70,7 +70,7 @@ hexadecimal and triacontakaidecimal, just as decimal and octal digits have the s
 hexadecimal. This will be consistent and compatible with the JavaScript _parseInt()_ function,
 simplify implementation, reduce programmer error and bugs, and improve learnability of the notation.
 
-###Past proposals
+### Past proposals
 
 Several RFCs have proposed a system for base 32, but none (it seems) have yet been introduced
 into a programming language for use in literals. All systems proposed to date derive a set of 32

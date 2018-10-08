@@ -18,14 +18,15 @@ In this article, an extension to this syntax for integer literals is proposed th
 support base 4 (_quaternary_) and base 32 (_triacontakaidecimal_) integer literals.
 
 Although the utility of base 4 and base 32 literals may be less than that of other radixes,
-historically there has been sufficient interest in base 32 literal encodings that at least four
-similar notations have been proposed.
+historically there has been sufficient interest in base 32 encodings based on digits and letters
+that at least four similar notations have been proposed.
+
 By contrast, base 4 integer literals appear to have never been used in computing before; however,
 they could easily be included for the sake of completeness, and because their usefulness may yet
-be revealed by creative programmers.
-While we don't want useless features in JavaScript, this addition of this feature would hardly be
-intrusive or bloat the language, and it will be interesting to see how programmers make use of
-them.
+be revealed by creative programmers. While we don't want to start adding useless features to
+JavaScript, this addition of quaternary literals would be something new and interesting, it would
+hardly be intrusive or bloat the language, and it will be interesting to see how programmers make
+use of them.
 
 ## Summary of Syntax Design
 
@@ -47,9 +48,10 @@ consistency with hexadecimal literals.
 ## Quaternary (base 4)
 
 Quaternary integer literals are introduced here for several reasons:
-* for the sake of completeness
-* to support the development of programs related to genetics, Hilbert curves, 2B1Q data
-transmission line codes, and other potential uses
+* for the sake of completeness; along with triacontakaidecimal, we will then have a syntax for
+integer literals that use from 1-5 bits per digit
+* to support the development of programs related to genetics, Hilbert curves, 2B1Q (two binary,
+one quaternary) data transmission line codes, and other potential uses
 * to see what kinds of interesting things creative programmers and engineers use them for
 * to be a point of difference for EcmaScript
 
@@ -69,16 +71,18 @@ of the English alphabet, and then excluding four of these. All systems accept bo
 lower-case letters, with the value of an upper-case letter equal to its lower-case variant.
 
 Triacontakaidecimal digit characters should be backwards compatible with their values in other
-integer literals, i.e. The digits 0..9 and A..F should thus have the same value in both hexadecimal
+integer literals, i.e. he digits 0..9 and A..F should have the same value in both hexadecimal
 and triacontakaidecimal, just as decimal and octal digits have the same value in hexadecimal. This
-will be consistent, compatible with the JavaScript parseInt() function, simplify implementation,
-reduce programmer error and bugs, and improve learnability of the notation. 
+will be consistent and compatible with the JavaScript _parseInt()_ function, simplify implementation,
+reduce programmer error and bugs, and improve learnability of the notation.
+
+Comparison with previous proposals:
 
 #### RFC 4648
 
 The letters of the alphabet are assigned the values 0–25, and the digits 2-7 are assigned the values
 26-31. The digits 0, 1, 8, and 9 are excluded. This system is not compatible with hexadecimal
-(i.e. A means 0 instead of 10, etc.) and is therefore suboptimal.
+(i.e. "A" means 0 instead of 10, "2" means 26 instead of 2, etc.) and is therefore suboptimal.
 
 See:
 - S. Josefsson, Ed., RFC 3548, Network Working Group, July 2003
@@ -92,7 +96,7 @@ http://www.ietf.org/rfc/rfc4648.txt
 This system excludes 0, 1, V, and 2 due to their similarity with O, I, U and Z respectively. The
 32 digit characters are mapped to the values 0-31 in an unobvious and seemingly random fashion.
 For example, in this system, Y means 0. Again, the digit character values are not compatible with
-literals in other radixes.
+literals in other radixes. This would be the hardest system to learn and the most bug-prone.
 
 See: Z. O'Whielacronx, "Human-Oriented Base-32 Encoding", November 2009
 http://philzimmermann.com/docs/human-oriented-base-32-encoding.txt
@@ -100,7 +104,7 @@ http://philzimmermann.com/docs/human-oriented-base-32-encoding.txt
 #### base32hex
 
 This system is compatible with hexadecimal, using the digits 0-9 and the first 22 letters
-of the alphabet, thus excluding W, X, Y, and Z. However, the potential exists for confusion between
+of the alphabet, thus excluding W, X, Y, and Z. However, the potential remains for confusion between
 the digits 0 and 1, and the letters O, I, and L.
 
 See: G. Klyne and L. Masinter, RFC 2938, Network Working Group, September 2000
@@ -108,9 +112,8 @@ http://www.ietf.org/rfc/rfc2938.txt
 
 #### Crockford
 
-Crockford's system uses all digits and letters, excluding "O" to avoid confusion between
-upper-case 'O' and the digit '0', and excluding "I" and "L" to avoid confusion between the digit
-"1", upper-case "I", and lower-case "L" (i.e. "l").
+Crockford's system excludes "O" to avoid confusion with the digit "0", and excludes "I" and "L" to
+avoid confusion between the digit "1", upper-case "I", and lower-case "L" (i.e. "l").
 
 The letter "U" is also excluded, to reduce the likelihood that curse words appearing in literals.
 However, this reason is weak, since:
@@ -127,9 +130,10 @@ http://www.crockford.com/wrmg/base32.html
 
 The proposal offered here is a slight modification of Crockford's, excluding "T" rather than "U",
 to avoid confusion between the "0t" prefix and the digit characters.
+
 The excluded letters can easily be remembered thusly: "Programming should be fun, not TOIL".
 
-*Digits and equivalent decimal values*
+*Triacontakaidecimal digit characters and equivalent decimal values*
 
 | Digit | Value |   | Digit | Value |
 |---|----|---|---|----|
@@ -150,14 +154,15 @@ The excluded letters can easily be remembered thusly: "Programming should be fun
 | E | 14 |   | Y | 30 | 
 | F | 15 |   | Z | 31 |
 
-##### Interpretation of invalid digits
+##### Acceptance of invalid letters
 
 In Crockford's system, the letter "O" is accepted as 0, and the letters "I" and "L" as 1.
 
-For consistency with the existing language and to reduce programmer error, this behaviour is
-not proposed for inclusion in the feature. The presence of any invalid letters or other characters,
-including "O", "I" and "L" , should trigger a syntax error, and parseint() should return "NaN" (or
-ignore trailing invalid characters) as it does when parsing integer literals in other radixes.
+For consistency with the current EcmaScript langauge specification and to reduce programmer error,
+this behaviour is **not** proposed for inclusion in the feature. The presence of any invalid letters
+or other characters in an triacontakaidecimal integer literal, including "O", "I" and "L" , should
+trigger a syntax error, and _parseint()_ should return "NaN" (or ignore trailing invalid characters
+as usual) as it does when parsing integer literals in other radixes.
 
 ## Proposed implementation
 

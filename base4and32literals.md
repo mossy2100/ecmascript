@@ -42,8 +42,8 @@ hexadecimal literals.
 | 4 | 16 | hexadecimal             | 0x     | 0123456789ABCDEF                 |
 | 5 | 32 | __triacontakaidecimal__ | __0t__ | 0123456789ABCDEFGHJKMNPQRSUVWXYZ |
 
-Both prefixes and letter-digits may be coded as either upper or lower case for
-consistency with hexadecimal literals.
+Both prefixes and letter-digits can be coded as either upper or lower case for
+consistency with the existing language specification.
 
 ## Quaternary (base 4)
 
@@ -93,9 +93,10 @@ http://www.ietf.org/rfc/rfc4648.txt
 
 #### z-base-32
 
-This system excludes 0, 1, V, and 2 due to their similarity with O, I, U and Z respectively. The
-32 digit characters are mapped to the values 0-31 in an unobvious and seemingly random fashion.
-For example, in this system, Y means 0. Again, the digit character values are not compatible with
+This system excludes 0, 1, V, and 2 due to their similarity with O, I, U, and Z
+respectively. The 32 digit characters are mapped to the values 0-31 in an unobvious and seemingly
+random fashion.
+For example, in this system, "Y" means 0. Again, the digit character values are not compatible with
 literals in other radixes. This would be the hardest system to learn and the most bug-prone.
 
 See: Z. O'Whielacronx, "Human-Oriented Base-32 Encoding", November 2009
@@ -159,10 +160,12 @@ The excluded letters can easily be remembered thusly: "Programming should be fun
 In Crockford's system, the letter "O" is accepted as 0, and the letters "I" and "L" as 1.
 
 For consistency with the current EcmaScript langauge specification and to reduce programmer error,
-this behaviour is **not** proposed for inclusion in the feature. The presence of any invalid letters
-or other characters in an triacontakaidecimal integer literal, including "O", "I" and "L" , should
-trigger a syntax error, and _parseint()_ should return "NaN", or ignore trailing invalid characters,
-as it currently does when parsing integer literals in other radixes.
+this behaviour is **not** proposed for inclusion in the feature, mainly because this is not how
+integers in other radixes are currently parsed in EcmaScript.
+The presence of any invalid letters or other characters in an triacontakaidecimal integer literal,
+including "O", "I" and "L" , should therefore trigger a syntax error, and _parseint()_ should
+return "NaN", or ignore trailing invalid characters, as it currently does when parsing integer
+literals in other radixes.
 
 ## Proposed implementation
 
